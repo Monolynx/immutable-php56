@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Jasny\Immutable;
 
 /**
@@ -16,7 +14,7 @@ trait NoDynamicProperties
      * @param mixed  $value
      * @throws \LogicException
      */
-    public function __set(string $property, $value): void
+    public function __set($property, $value)
     {
         throw new \LogicException(sprintf('%s has no property "%s"', get_class($this), $property));
     }
