@@ -1,8 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Jasny\Immutable;
+
+use ArrayAccess;
+use BadMethodCallException;
 
 /**
  * Trait with the `withProperty` methods that can be used by classes of immutable objects.
@@ -18,12 +19,12 @@ trait With
      * @param string  $property
      * @param mixed   $value
      * @return static
-     * @throws \BadMethodCallException if property doesn't exist
+     * @throws BadMethodCallException if property doesn't exist
      */
-    private function withProperty(string $property, $value)
+    private function withProperty($property, $value)
     {
         if (!property_exists($this, $property)) {
-            throw new \BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
+            throw new BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
         }
 
         if (
@@ -45,12 +46,12 @@ trait With
      *
      * @param string  $property
      * @return static
-     * @throws \BadMethodCallException if property doesn't exist
+     * @throws BadMethodCallException if property doesn't exist
      */
-    private function withoutProperty(string $property)
+    private function withoutProperty($property)
     {
         if (!property_exists($this, $property)) {
-            throw new \BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
+            throw new BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
         }
 
         if (!isset($this->{$property})) {
@@ -72,15 +73,15 @@ trait With
      * @param string  $key
      * @param mixed   $value
      * @return static
-     * @throws \BadMethodCallException if property doesn't exist
+     * @throws BadMethodCallException if property doesn't exist
      */
-    private function withPropertyKey(string $property, string $key, $value)
+    private function withPropertyKey($property, $key, $value)
     {
         if (!property_exists($this, $property)) {
-            throw new \BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
+            throw new BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
         } // @codeCoverageIgnore
-        if (!is_array($this->{$property}) && !$this->{$property} instanceof \ArrayAccess) {
-            throw new \BadMethodCallException(sprintf('%s::$%s is not an array', get_class($this), $property));
+        if (!is_array($this->{$property}) && !$this->{$property} instanceof ArrayAccess) {
+            throw new BadMethodCallException(sprintf('%s::$%s is not an array', get_class($this), $property));
         }
 
         if (isset($this->{$property}[$key]) && $this->{$property}[$key] === $value) {
@@ -100,15 +101,15 @@ trait With
      * @param string  $property
      * @param string  $key
      * @return static
-     * @throws \BadMethodCallException if property doesn't exist or isn't an array
+     * @throws BadMethodCallException if property doesn't exist or isn't an array
      */
-    private function withoutPropertyKey(string $property, string $key)
+    private function withoutPropertyKey($property, $key)
     {
         if (!property_exists($this, $property)) {
-            throw new \BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
+            throw new BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
         } // @codeCoverageIgnore
-        if (!is_array($this->{$property}) && !$this->{$property} instanceof \ArrayAccess) {
-            throw new \BadMethodCallException(sprintf('%s::$%s is not an array', get_class($this), $property));
+        if (!is_array($this->{$property}) && !$this->{$property} instanceof ArrayAccess) {
+            throw new BadMethodCallException(sprintf('%s::$%s is not an array', get_class($this), $property));
         }
 
         if (!isset($this->{$property}[$key])) {
@@ -129,15 +130,15 @@ trait With
      * @param mixed   $value
      * @param mixed   $unique    Don't add if the array already has a copy of the value.
      * @return static
-     * @throws \BadMethodCallException if property doesn't exist or isn't an array
+     * @throws BadMethodCallException if property doesn't exist or isn't an array
      */
-    private function withPropertyItem(string $property, $value, bool $unique = false)
+    private function withPropertyItem($property, $value, $unique = false)
     {
         if (!property_exists($this, $property)) {
-            throw new \BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
+            throw new BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
         }
         if (!is_array($this->{$property})) {
-            throw new \BadMethodCallException(sprintf('%s::$%s is not an array', get_class($this), $property));
+            throw new BadMethodCallException(sprintf('%s::$%s is not an array', get_class($this), $property));
         }
 
         if ($unique && in_array($value, $this->{$property}, true)) {
@@ -157,15 +158,15 @@ trait With
      * @param string  $property
      * @param mixed   $value
      * @return static
-     * @throws \BadMethodCallException if property doesn't exist or isn't an array
+     * @throws BadMethodCallException if property doesn't exist or isn't an array
      */
-    private function withoutPropertyItem(string $property, $value)
+    private function withoutPropertyItem($property, $value)
     {
         if (!property_exists($this, $property)) {
-            throw new \BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
+            throw new BadMethodCallException(sprintf('%s has no property "%s"', get_class($this), $property));
         }
         if (!is_array($this->{$property})) {
-            throw new \BadMethodCallException(sprintf('%s::$%s is not an array', get_class($this), $property));
+            throw new BadMethodCallException(sprintf('%s::$%s is not an array', get_class($this), $property));
         }
 
         $keys = array_keys($this->{$property}, $value, true);
